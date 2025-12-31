@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>단어 검색기</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>단어 검색</h1>
+
+  <form method="POST">
+    <input name="query"
+           placeholder="검색"
+           value="{{ query }}"
+           required
+           autocomplete="off"
+           autofocus>
+    <button type="submit">검색</button>
+  </form>
+
+  <div class="results {% if left_results %}dual{% else %}single{% endif %}">
+    {% if not left_results %}
+    <!-- ✅ 미션 단어 카드 -->
+    <div class="card wide">
+      <h2>📌 미션 단어</h2>
+      <ul>
+        {% for word in right_results %}
+        <li>{{ word }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <!-- ✅ 긴 단어 + 공격 단어 카드 -->
+    <div class="card wide-left">
+      <h2>📚 긴 단어</h2>
+      <ul>
+        {% for word in left_results %}
+        <li>{{ word }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>⚔️ 공격 단어</h2>
+      <ul>
+        {% for word in right_results %}
+        <li>{{ word }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- 검색창 자동 포커스 및 커서 맨 뒤 유지 -->
+  <script>
+    function focusInput() {
+      const input = document.querySelector('input[name="query"]');
+      if (input) {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', focusInput);
+    window.addEventListener('pageshow', focusInput);
+    window.addEventListener('focus', focusInput);
+  </script>
+</body>
+</html>
